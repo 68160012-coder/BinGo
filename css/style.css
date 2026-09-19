@@ -1,0 +1,671 @@
+/* ==========================================
+   BinGo — ระบบจัดการขยะบางแสน
+   Design language: หาดบางแสนยามเช้า — ทะเล, ทราย, ร่องคลื่น
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap');
+
+:root {
+    --deep-tide:   #0F3D3E;
+    --sea-glass:   #2A9D8F;
+    --sea-glass-light: #6FC3B6;
+    --sand:        #FBF6EC;
+    --sand-deep:   #EDE1C8;
+    --shell:       #FFFFFF;
+    --coral:       #E76F51;
+    --amber:       #C98A3D;
+    --ink:         #16302E;
+    --ink-soft:    #4C6663;
+
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+
+    --shadow-hero: 0 18px 40px -14px rgba(15, 61, 62, 0.45);
+    --shadow-card: 0 8px 22px -12px rgba(15, 61, 62, 0.22);
+    --shadow-soft: 0 4px 14px -8px rgba(15, 61, 62, 0.16);
+
+    font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--sand);
+    background-image:
+        radial-gradient(circle at 8% 4%, rgba(42, 157, 143, 0.14), transparent 42%),
+        radial-gradient(circle at 96% 0%, rgba(231, 111, 81, 0.10), transparent 38%),
+        radial-gradient(circle at 50% 100%, rgba(42, 157, 143, 0.08), transparent 45%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='44'%3E%3Cpath d='M0 24 Q 35 6 70 24 T 140 24' stroke='%230F3D3E' stroke-width='1.2' fill='none' opacity='0.055'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    color: var(--ink);
+    font-family: 'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .bento-value, .rank-value, .rank-number, .logo {
+    font-family: 'Mitr', 'IBM Plex Sans Thai', sans-serif;
+}
+
+a { color: inherit; }
+
+.container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.hidden { display: none !important; }
+
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ==========================================
+   HEADER — เส้นขอบคลื่นแทน hairline ปกติ
+   ========================================== */
+
+.site-header {
+    background: var(--sand);
+    position: relative;
+    padding-bottom: 6px;
+}
+
+.site-header::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 10px;
+    background:
+        radial-gradient(circle at 10px 0, transparent 9px, var(--sand) 10px) 0 -5px / 20px 10px repeat-x,
+        var(--deep-tide);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px 22px;
+}
+
+.logo {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--deep-tide);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+}
+
+.main-nav {
+    display: flex;
+    gap: 6px;
+    background: var(--shell);
+    padding: 5px;
+    border-radius: 999px;
+    box-shadow: var(--shadow-soft);
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-weight: 500;
+    font-size: 0.92rem;
+    padding: 9px 18px;
+    border-radius: 999px;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-link:hover { color: var(--deep-tide); }
+
+.nav-link.active {
+    background: var(--deep-tide);
+    color: var(--sand);
+}
+
+/* ==========================================
+   PAGE HERO
+   ========================================== */
+
+.page-wrapper { padding-bottom: 64px; }
+
+.page-hero {
+    padding: 48px 0 34px;
+    position: relative;
+}
+
+.page-title {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--deep-tide);
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+    line-height: 1.15;
+}
+
+.page-subtitle {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    max-width: 480px;
+}
+
+/* ==========================================
+   LOADING / ERROR STATES
+   ========================================== */
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 70px 0;
+    color: var(--ink-soft);
+}
+
+.loading-state.compact {
+    flex-direction: row;
+    padding: 26px 0;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.spinner {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 3px solid var(--sand-deep);
+    border-top-color: var(--sea-glass);
+    animation: spin 0.85s linear infinite;
+}
+
+.spinner.small { width: 20px; height: 20px; border-width: 2px; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.alert {
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    margin-top: 14px;
+}
+
+.alert-error {
+    background: #FBEAE4;
+    color: #9A3F27;
+    border: 1px solid rgba(231, 111, 81, 0.35);
+}
+
+.alert-success {
+    background: #E7F3EF;
+    color: #1F6B57;
+    border: 1px solid rgba(42, 157, 143, 0.35);
+}
+
+/* ==========================================
+   KPI SECTION — bento grid ทรงบ่อทราย
+   ========================================== */
+
+.kpi-section { margin-bottom: 40px; }
+
+.kpi-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.section-label {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--deep-tide);
+    margin: 0;
+}
+
+.year-select, .filter-select {
+    appearance: none;
+    background: var(--shell) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230F3D3E' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+    border: 1px solid var(--sand-deep);
+    border-radius: 999px;
+    padding: 9px 38px 9px 16px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--deep-tide);
+    cursor: pointer;
+}
+
+.year-select:focus, .filter-select:focus,
+.nav-link:focus-visible, .btn:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--sea-glass);
+    outline-offset: 2px;
+}
+
+.kpi-overview {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 8px;
+    align-items: center;
+    background: linear-gradient(150deg, var(--deep-tide) 0%, #123F41 55%, #0B2E2F 100%);
+    border-radius: 28px;
+    box-shadow: var(--shadow-hero);
+    padding: 36px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-overview::before {
+    content: "";
+    position: absolute;
+    right: -60px; bottom: -80px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(111, 195, 182, 0.18), transparent 70%);
+}
+
+.gauge-block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-svg { transform: rotate(-90deg); }
+
+.gauge-track {
+    fill: none;
+    stroke: rgba(251, 246, 236, 0.14);
+    stroke-width: 14;
+}
+
+.gauge-fill {
+    fill: none;
+    stroke: var(--sea-glass-light);
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 578;
+    stroke-dashoffset: 578;
+    transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 10px rgba(111, 195, 182, 0.5));
+}
+
+.gauge-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.gauge-value-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.gauge-value {
+    font-size: 3.6rem;
+    font-weight: 700;
+    color: var(--sand);
+    font-variant-numeric: tabular-nums;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+}
+
+.gauge-percent {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--sea-glass-light);
+}
+
+.gauge-caption {
+    margin-top: 10px;
+    font-size: 0.88rem;
+    color: rgba(251, 246, 236, 0.6);
+    letter-spacing: 0.02em;
+}
+
+.kpi-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.kpi-mini {
+    background: rgba(251, 246, 236, 0.07);
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.kpi-mini-icon { font-size: 1.3rem; margin-bottom: 2px; }
+
+.kpi-mini-label {
+    font-size: 0.85rem;
+    color: rgba(251, 246, 236, 0.6);
+}
+
+.kpi-mini-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--sand);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+.kpi-mini-unit {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(251, 246, 236, 0.55);
+}
+
+/* ==========================================
+   RANKING SECTION
+   ========================================== */
+
+.panel {
+    background: var(--shell);
+    border-radius: 28px;
+    box-shadow: var(--shadow-card);
+    padding: 28px 30px;
+}
+
+.panel-header { margin-bottom: 6px; }
+
+.panel-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--deep-tide);
+    letter-spacing: -0.01em;
+    margin: 0 0 4px;
+}
+
+.panel-subtitle {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+
+.ranking-list { margin-top: 16px; }
+
+.ranking-item {
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 14px;
+    border-radius: 14px;
+}
+
+.ranking-item:nth-child(odd) { background: var(--sand); }
+
+.rank-number {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--sand);
+    color: var(--deep-tide);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.ranking-item:nth-child(1) .rank-number { background: var(--sea-glass); color: var(--shell); }
+
+.rank-name {
+    font-size: 0.96rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 7px;
+}
+
+.rank-bar-bg {
+    height: 7px;
+    background: var(--sand);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.rank-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--sea-glass), var(--sea-glass-light));
+}
+
+.rank-value {
+    font-weight: 700;
+    color: var(--deep-tide);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.05rem;
+    padding-right: 4px;
+}
+
+/* ==========================================
+   REPORT PAGE — ฟอร์มแจ้งจุดขยะ + รายการ
+   ========================================== */
+
+#report-section {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 24px;
+    padding: 40px 0 64px;
+    align-items: start;
+}
+
+.form-panel {
+    background: var(--shell);
+    border: none;
+    border-radius: 28px;
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: 24px;
+}
+
+.form-panel .panel-title {
+    margin: -28px -30px 22px;
+    padding: 20px 30px;
+    background: var(--sand);
+    border-radius: 28px 28px 0 0;
+    font-size: 1.15rem;
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-row {
+    display: flex;
+    gap: 14px;
+}
+
+.flex-1 { flex: 1; }
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+}
+
+input, select, textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.94rem;
+    color: var(--ink);
+    background: var(--sand);
+    border: 1px solid var(--sand-deep);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+}
+
+input::placeholder, textarea::placeholder { color: #9AACA9; }
+
+textarea { resize: vertical; min-height: 70px; }
+
+.btn {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.btn-primary {
+    background: var(--sea-glass);
+    color: var(--shell);
+    box-shadow: 0 10px 22px -10px rgba(42, 157, 143, 0.55);
+}
+
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-block { width: 100%; padding: 13px; margin-top: 4px; }
+
+.list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.reports-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.report-item {
+    background: var(--shell);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-soft);
+}
+
+.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.report-loc {
+    font-size: 0.98rem;
+    color: var(--deep-tide);
+    font-weight: 600;
+}
+
+.badge {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.badge-new { background: #FBEAE4; color: var(--coral); }
+.badge-in_progress { background: #FBF1E1; color: var(--amber); }
+.badge-done { background: #E7F3EF; color: var(--sea-glass); }
+
+.report-meta {
+    display: flex;
+    gap: 14px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+}
+
+.report-amount { font-weight: 600; color: var(--ink); }
+
+.report-detail {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+}
+
+.report-time {
+    font-size: 0.78rem;
+    color: #9AACA9;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--ink-soft);
+}
+
+.empty-state.compact { padding: 22px 0; font-size: 0.9rem; }
+
+.empty-icon { font-size: 2.2rem; display: block; margin-bottom: 10px; }
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.site-footer {
+    background: var(--deep-tide);
+    color: rgba(251, 246, 236, 0.7);
+    text-align: center;
+    padding: 22px 0;
+    font-size: 0.85rem;
+    position: relative;
+    margin-top: 20px;
+}
+
+.site-footer::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0; right: 0; top: -9px;
+    height: 10px;
+    background:
+        radial-gradient(circle at 10px 10px, transparent 9px, var(--deep-tide) 10px) 0 0 / 20px 10px repeat-x;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 860px) {
+    #report-section { grid-template-columns: 1fr; }
+    .form-panel { position: static; }
+    .kpi-overview { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+    .kpi-mini-grid { width: 100%; }
+}
+
+@media (max-width: 560px) {
+    .header-inner { flex-direction: column; gap: 12px; padding-bottom: 16px; }
+    .page-title { font-size: 1.6rem; }
+    .form-row { flex-direction: column; gap: 0; }
+    .kpi-header { align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spinner { animation: none; border-top-color: var(--sand-deep); }
+    .btn-primary:hover { transform: none; }
+}

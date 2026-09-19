@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BinGo - ระบบจัดการขยะบางแสน</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="logo">🗑️ BinGo</a>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">สถิติ</a>
+                <a href="report.html" class="nav-link">แจ้งจุดขยะ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container page-wrapper">
+        
+        <!-- Page Title -->
+        <div class="page-hero">
+            <h1 class="page-title">สถิติการจัดการขยะ</h1>
+            <p class="page-subtitle">ข้อมูลเชิงลึกจาก Open Data จังหวัดชลบุรี</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-state">
+            <div class="spinner"></div>
+            <p>กำลังโหลดข้อมูล...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="alert alert-error hidden"></div>
+
+        <!-- Content -->
+        <div id="content-wrapper" class="hidden">
+            
+            <!-- KPI Section: Bangsaen Focus -->
+            <section class="kpi-section">
+                <div class="kpi-header">
+                    <h2 class="section-label">ภาพรวมเทศบาลเมืองแสนสุข</h2>
+                    
+                    <!-- เพิ่ม Dropdown เลือกปี -->
+                    <div class="year-selector-wrap">
+                        <label for="year-select" class="sr-only">เลือกปี</label>
+                        <select id="year-select" class="year-select">
+                            <option value="">กำลังโหลด...</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="kpi-overview">
+                    <div class="gauge-block">
+                        <svg class="gauge-svg" viewBox="0 0 220 220" width="220" height="220" aria-hidden="true">
+                            <circle class="gauge-track" cx="110" cy="110" r="92" />
+                            <circle class="gauge-fill" id="gauge-fill" cx="110" cy="110" r="92" />
+                        </svg>
+                        <div class="gauge-text">
+                            <div class="gauge-value-wrap">
+                                <span class="gauge-value" id="bs-rate">-</span><span class="gauge-percent">%</span>
+                            </div>
+                            <span class="gauge-caption">กำจัดถูกวิธี</span>
+                        </div>
+                    </div>
+                    <div class="kpi-mini-grid">
+                        <div class="kpi-mini">
+                            <span class="kpi-mini-icon">📦</span>
+                            <span class="kpi-mini-label">ขยะที่เกิดขึ้น</span>
+                            <div class="kpi-mini-value"><span id="bs-generated">-</span><span class="kpi-mini-unit">ตัน/วัน</span></div>
+                        </div>
+                        <div class="kpi-mini">
+                            <span class="kpi-mini-icon">✅</span>
+                            <span class="kpi-mini-label">กำจัดถูกต้อง</span>
+                            <div class="kpi-mini-value"><span id="bs-proper">-</span><span class="kpi-mini-unit">ตัน/วัน</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top 5 Ranking Section -->
+            <section class="ranking-section">
+                <div class="panel ranking-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">🏆 5 อปท. ที่มีขยะมากที่สุด</h2>
+                        <span class="panel-subtitle">เรียงตามปริมาณขยะที่เกิดขึ้น (ตัน/วัน)</span>
+                    </div>
+                    
+                    <div class="ranking-list" id="top-list-body">
+                        <!-- JS จะสร้าง .ranking-item ใส่ตรงนี้ -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2026 BinGo Waste Management | ข้อมูลจาก Open Data Chonburi</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
