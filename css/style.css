@@ -1,0 +1,243 @@
+/* =========================================
+   DESIGN SYSTEM - BinGo Dashboard UI
+   Theme: #425B9A (Primary), #76C0EC (Accent), #FFF6DC (BG)
+   ========================================= */
+
+:root {
+    --primary: #425B9A;
+    --primary-dark: #2E406D;
+    --accent: #76C0EC;
+    --bg: #FFF6DC;
+    --surface: #FFFFFF;
+    --text: #1E293B;
+    --text-muted: #64748B;
+    --border: rgba(66, 91, 154, 0.12);
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(66, 91, 154, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.hidden { display: none !important; }
+.accent-text { color: var(--accent) !important; }
+
+/* --- HEADER --- */
+.site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky; top: 0; z-index: 100;
+}
+.header-inner { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); text-decoration: none; }
+.main-nav { display: flex; gap: 0.5rem; }
+.nav-link {
+    padding: 0.5rem 1.25rem; border-radius: 999px; text-decoration: none;
+    font-weight: 600; font-size: 0.9rem; color: var(--text-muted); transition: 0.2s;
+}
+.nav-link.active { background: var(--primary); color: #fff; }
+.nav-link:hover:not(.active) { background: rgba(66,91,154,0.05); color: var(--primary); }
+
+/* --- PAGE HERO --- */
+.page-wrapper { padding-top: 2rem; padding-bottom: 4rem; flex: 1; }
+.page-hero { margin-bottom: 2.5rem; }
+.page-title { font-size: 2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.02em; }
+.page-subtitle { color: var(--text-muted); margin-top: 0.25rem; font-size: 1rem; }
+
+/* --- PANELS --- */
+.panel {
+    background: var(--surface); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.5rem; border: 1px solid var(--border);
+}
+.panel-title { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.panel-subtitle { font-size: 0.85rem; color: var(--text-muted); }
+.panel-header { margin-bottom: 1.5rem; }
+
+/* =========================================
+   STATS LAYOUT: BENTO GRID
+   ========================================= */
+.kpi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.section-label { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.badge-year {
+    background: var(--primary); color: #fff; padding: 0.25rem 0.75rem;
+    border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.bento-card {
+    background: var(--surface); border-radius: var(--radius); padding: 1.5rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 1rem;
+}
+.bento-main {
+    grid-column: span 1;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white; border: none;
+}
+.bento-main .bento-label { color: rgba(255,255,255,0.8); }
+.bento-main .bento-unit { color: rgba(255,255,255,0.8); }
+.bento-main .bento-value { color: #fff; }
+
+.bento-icon { font-size: 2rem; opacity: 0.8; }
+.bento-info { display: flex; flex-direction: column; }
+.bento-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.bento-value-wrap { display: flex; align-items: baseline; gap: 0.25rem; margin-top: 0.25rem; }
+.bento-value { font-size: 1.75rem; font-weight: 800; color: var(--primary); line-height: 1; }
+.bento-unit { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+
+/* --- RANKING LIST (แทน Table เดิม) --- */
+.ranking-panel { padding: 2rem; }
+.ranking-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.ranking-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 100px;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #F8FAFC;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+.ranking-item:hover { background: #F1F5F9; transform: translateX(4px); }
+
+.rank-number {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.9rem; color: var(--primary);
+    background: rgba(66,91,154,0.1);
+}
+.ranking-item:nth-child(1) .rank-number { background: var(--primary); color: #fff; }
+.ranking-item:nth-child(2) .rank-number { background: var(--accent); color: #fff; }
+.ranking-item:nth-child(3) .rank-number { background: #94A3B8; color: #fff; }
+
+.rank-info { display: flex; flex-direction: column; gap: 0.4rem; }
+.rank-name { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+.rank-bar-bg { height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; width: 100%; }
+.rank-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.8s ease-out; }
+
+.rank-value { text-align: right; font-weight: 700; font-size: 1rem; color: var(--primary); font-variant-numeric: tabular-nums; }
+
+/* =========================================
+   REPORT LAYOUT: SPLIT 2-COLUMN
+   ========================================= */
+.split-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.sticky-form { position: sticky; top: 90px; }
+
+.list-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border);
+}
+
+/* --- FORM --- */
+.form-panel { border-top: 4px solid var(--accent); }
+.form-group { margin-bottom: 1.25rem; }
+.form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.85rem; color: var(--text); }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #E2E8F0;
+    border-radius: 10px; font-size: 0.95rem; font-family: inherit;
+    background: #F8FAFC; transition: 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--accent); background: #fff;
+    box-shadow: 0 0 0 3px rgba(118,192,236,0.15);
+}
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700;
+    font-size: 0.95rem; border: none; cursor: pointer; transition: 0.2s;
+}
+.btn-primary { background: var(--primary); color: #fff; width: 100%; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.alert { padding: 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; margin-top: 1rem; text-align: center; }
+.alert-success { background: #D1FAE5; color: #065F46; }
+.alert-error { background: #FEE2E2; color: #991B1B; }
+
+.filter-select {
+    padding: 0.4rem 2rem 0.4rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; background: var(--surface); color: var(--primary);
+    font-weight: 600; font-size: 0.85rem; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23425B9A' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.75rem center;
+}
+
+/* --- FEED LIST (Report Cards) --- */
+.feed-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.report-item {
+    background: var(--surface); border-radius: 12px; padding: 1.25rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;
+    transition: 0.2s;
+}
+.report-item:hover { border-color: var(--accent); }
+
+.report-header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+.report-loc { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+.badge { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 6px; font-weight: 700; }
+.badge-new { background: #FEF3C7; color: #92400E; }
+.badge-in_progress { background: #DBEAFE; color: #1E40AF; }
+.badge-done { background: #D1FAE5; color: #065F46; }
+
+.report-meta { grid-column: 1 / -1; display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-muted); }
+.report-amount { font-weight: 700; color: var(--primary); background: rgba(66,91,154,0.05); padding: 0.1rem 0.4rem; border-radius: 4px; }
+
+.report-detail { grid-column: 1 / -1; font-size: 0.85rem; color: var(--text); background: #F8FAFC; padding: 0.5rem; border-radius: 6px; margin-top: 0.25rem; }
+.report-time { grid-column: 1 / -1; font-size: 0.7rem; color: #94A3B8; text-align: right; margin-top: 0.5rem; }
+
+/* --- STATES --- */
+.loading-state { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 4rem 1rem; color: var(--text-muted); }
+.loading-state.compact { flex-direction: row; padding: 2rem; justify-content: center; }
+.spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.spinner.small { width: 20px; height: 20px; border-width: 2px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); border: 2px dashed var(--border); border-radius: var(--radius); }
+.empty-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.5; }
+
+.site-footer { margin-top: auto; padding: 2rem 0; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+
+/* =========================================
+   RESPONSIVE (Mobile First Adjustments)
+   ========================================= */
+@media (max-width: 860px) {
+    .split-layout { grid-template-columns: 1fr; }
+    .sticky-form { position: static; }
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-main { grid-column: span 1; }
+    
+    .ranking-item { grid-template-columns: 32px 1fr 80px; gap: 0.75rem; padding: 0.75rem; }
+    .rank-value { font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+    .page-title { font-size: 1.5rem; }
+    .header-inner { flex-direction: column; gap: 0.75rem; }
+    .main-nav { width: 100%; justify-content: center; }
+}
