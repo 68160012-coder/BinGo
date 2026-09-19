@@ -31,77 +31,123 @@ document.addEventListener('DOMContentLoaded', () => {
             loading: statsLoading,
             error: document.getElementById('error-state'),
             content: document.getElementById('content-wrapper'),
-            year: document.getElementById('stats-year'),
+            generated: document.getElementById('bs-generated'),
+            proper: document.getElementById('bs-proper'),
+            rate: document.getElementById('bs-rate'),
+            topBody: document.getElementById('top-list-body'),
+            yearSelect: document.getElementById('year-select') // เพิ่มตัวแปรนี้
+        };
+
+        // ฟังก์ชันโหลดข้อมูล (รับ year เป็น argument)
+        async function loadData(selectedYear = null) {
+            try {
+                // สร้าง URL พร้อม query string ถ้ามีปี
+                const url = selectedYear 
+                    ? `/api/stats.php?year=${selectedYear}` 
+                    : '/api/stats.php';
+                
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+
+                // 1. อัปเดต Dropdown (ทำแค่ครั้งแรก หรือเมื่อ list เปลี่ยน)
+                if (data.available_years && els.yearSelect.options.length <= 1) {
+                    els.yearSelect.innerHTML = ''; // ล้าง "กำลังโหลด"
+                    data.available_years.forEach(y => {
+                        const opt = document.createElement('option');
+                        opt.value = y;
+                        opt.textContent = `พ.ศ. ${y}`;
+                        if (parseInt(y) === data.year) opt.selected = true;
+                        els.yearSelect.appendChild(opt);
+                    });
+                }
+
+                // 2. Render ข้อมูล (KPI + Table)
+                renderStats(data);
+                
+                // 3. ซ่อน Loading
+                els.loading.classList.add('hidden');
+                els.content.classList.remove('hidden');
+
+            } catch (err) {
+                console.error(err);
+                els.loading.classList.add('hidden');
+                els.error.textContent = 'ไม่สามารถโหลดข้อมูลสถิติได้';
+                els.error.classList.remove('hidden');
+            }
+        }
+
+        // Event Listener: เมื่อเปลี่ยนปี ให้โหลดใหม่
+        els.yearSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            // แสดง loading state เล็กน้อยขณะโหลด (opacity ลดลง)
+            els.content.style.opacity = '0.5'; 
+            loadData(val).finally(() => {
+                els.content.style.opacity = '1';
+            });
+        });
+
+        // โหลดครั้งแรก (ไม่ระบุปี = ใช้ปีล่าสุด)
+        loadData();
+    }
+
+    function renderStats(data) {
+        const els = {
             generated: document.getElementById('bs-generated'),
             proper: document.getElementById('bs-proper'),
             rate: document.getElementById('bs-rate'),
             topBody: document.getElementById('top-list-body')
         };
 
-        try {
-            const res = await fetch('/api/stats.php');
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
+        // Render KPI
+        if (data.bangsaen) {
+            els.generated.textContent = formatNumber(data.bangsaen.generated_tpd);
+            els.proper.textContent = formatNumber(data.bangsaen.proper_tpd);
+            els.rate.textContent = data.bangsaen.proper_rate !== null ? data.bangsaen.proper_rate.toFixed(1) : '-';
+        } else {
+            els.generated.textContent = '-'; els.proper.textContent = '-'; els.rate.textContent = '-';
+        }
 
-            // Render KPI
-            if (data.bangsaen) {
-                els.generated.textContent = formatNumber(data.bangsaen.generated_tpd);
-                els.proper.textContent = formatNumber(data.bangsaen.proper_tpd);
-                els.rate.textContent = data.bangsaen.proper_rate !== null ? data.bangsaen.proper_rate.toFixed(1) : '-';
-            } else {
-                els.generated.textContent = '-'; els.proper.textContent = '-'; els.rate.textContent = '-';
-            }
-            els.year.textContent = data.year ? `ปี ${data.year}` : '-';
+        // Render Ranking List (แทน Table เดิม)
+        els.topBody.innerHTML = '';
+        if (!data.top || data.top.length === 0) {
+            els.topBody.innerHTML = '<div class="empty-state compact">ไม่มีข้อมูลสถิติในปีนี้</div>';
+        } else {
+            const maxVal = Math.max(...data.top.map(i => i.generated_tpd));
+            data.top.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'ranking-item';
 
-            // Render Ranking List (แทน Table เดิม)
-            els.topBody.innerHTML = '';
-            if (!data.top || data.top.length === 0) {
-                els.topBody.textContent = 'ไม่มีข้อมูลสถิติ';
-            } else {
-                const maxVal = Math.max(...data.top.map(i => i.generated_tpd));
-                data.top.forEach((item, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'ranking-item';
+                // Rank Number
+                const rankNum = document.createElement('div');
+                rankNum.className = 'rank-number';
+                rankNum.textContent = index + 1;
 
-                    // Rank Number
-                    const rankNum = document.createElement('div');
-                    rankNum.className = 'rank-number';
-                    rankNum.textContent = index + 1;
+                // Info (Name + Bar)
+                const info = document.createElement('div');
+                info.className = 'rank-info';
+                const name = document.createElement('div');
+                name.className = 'rank-name';
+                name.textContent = item.local_gov;
+                const barBg = document.createElement('div');
+                barBg.className = 'rank-bar-bg';
+                const barFill = document.createElement('div');
+                barFill.className = 'rank-bar-fill';
+                barFill.style.width = maxVal > 0 ? `${(item.generated_tpd / maxVal) * 100}%` : '0%';
+                barBg.appendChild(barFill);
+                info.appendChild(name);
+                info.appendChild(barBg);
 
-                    // Info (Name + Bar)
-                    const info = document.createElement('div');
-                    info.className = 'rank-info';
-                    const name = document.createElement('div');
-                    name.className = 'rank-name';
-                    name.textContent = item.local_gov;
-                    const barBg = document.createElement('div');
-                    barBg.className = 'rank-bar-bg';
-                    const barFill = document.createElement('div');
-                    barFill.className = 'rank-bar-fill';
-                    barFill.style.width = maxVal > 0 ? `${(item.generated_tpd / maxVal) * 100}%` : '0%';
-                    barBg.appendChild(barFill);
-                    info.appendChild(name);
-                    info.appendChild(barBg);
+                // Value
+                const val = document.createElement('div');
+                val.className = 'rank-value';
+                val.textContent = formatNumber(item.generated_tpd);
 
-                    // Value
-                    const val = document.createElement('div');
-                    val.className = 'rank-value';
-                    val.textContent = formatNumber(item.generated_tpd);
-
-                    div.appendChild(rankNum);
-                    div.appendChild(info);
-                    div.appendChild(val);
-                    els.topBody.appendChild(div);
-                });
-            }
-
-            els.loading.classList.add('hidden');
-            els.content.classList.remove('hidden');
-        } catch (err) {
-            console.error(err);
-            els.loading.classList.add('hidden');
-            els.error.textContent = 'ไม่สามารถโหลดข้อมูลสถิติได้ กรุณาลองใหม่อีกครั้ง';
-            els.error.classList.remove('hidden');
+                div.appendChild(rankNum);
+                div.appendChild(info);
+                div.appendChild(val);
+                els.topBody.appendChild(div);
+            });
         }
     }
 

@@ -1,4 +1,52 @@
-/* =========================================
+/* ... โค้ด CSS เดิม ... */
+
+/* --- Year Selector (新增) --- */
+.kpi-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 1.5rem; 
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.year-selector-wrap { 
+    /* ไม่ต้อง margin-left: auto เพราะ kpi-header เป็น flex space-between แล้ว */
+}
+
+.year-select {
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23425B9A' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.year-select:hover { 
+    background-color: #F0F4FF; 
+    border-color: var(--accent);
+}
+
+.year-select:focus { 
+    outline: none; 
+    box-shadow: 0 0 0 3px rgba(118, 192, 236, 0.3); 
+}
+
+/* Transition สำหรับ Content Wrapper เวลาเปลี่ยนปี */
+#content-wrapper {
+    transition: opacity 0.3s ease;
+}
+
+/* ... โค้ด CSS เดิม ... *//* =========================================
    DESIGN SYSTEM - BinGo Dashboard UI
    Theme: #425B9A (Primary), #76C0EC (Accent), #FFF6DC (BG)
    ========================================= */
@@ -31,6 +79,7 @@ body {
 .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
 .hidden { display: none !important; }
 .accent-text { color: var(--accent) !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
 /* --- HEADER --- */
 .site-header {
@@ -65,15 +114,51 @@ body {
 .panel-header { margin-bottom: 1.5rem; }
 
 /* =========================================
-   STATS LAYOUT: BENTO GRID
+   STATS LAYOUT: BENTO GRID & YEAR SELECTOR
    ========================================= */
-.kpi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.kpi-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 1.5rem; 
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 .section-label { font-size: 1.1rem; font-weight: 700; color: var(--text); }
-.badge-year {
-    background: var(--primary); color: #fff; padding: 0.25rem 0.75rem;
-    border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+
+/* Year Selector Dropdown */
+.year-selector-wrap { /* Wrapper for alignment */ }
+.year-select {
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23425B9A' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.year-select:hover { 
+    background-color: #F0F4FF; 
+    border-color: var(--accent);
+}
+.year-select:focus { 
+    outline: none; 
+    box-shadow: 0 0 0 3px rgba(118, 192, 236, 0.3); 
 }
 
+/* Transition สำหรับ Content Wrapper เวลาเปลี่ยนปี */
+#content-wrapper {
+    transition: opacity 0.3s ease;
+}
+
+/* Bento Grid Cards */
 .bento-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -219,6 +304,7 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); border: 2px dashed var(--border); border-radius: var(--radius); }
+.empty-state.compact { padding: 2rem; border: none; } /* สำหรับในตารางว่าง */
 .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.5; }
 
 .site-footer { margin-top: auto; padding: 2rem 0; text-align: center; font-size: 0.8rem; color: var(--text-muted); }

@@ -41,8 +41,16 @@
             <section class="kpi-section">
                 <div class="kpi-header">
                     <h2 class="section-label">ภาพรวมเทศบาลเมืองแสนสุข</h2>
-                    <span class="badge-year" id="stats-year">ปี -</span>
+                    
+                    <!-- เพิ่ม Dropdown เลือกปี -->
+                    <div class="year-selector-wrap">
+                        <label for="year-select" class="sr-only">เลือกปี</label>
+                        <select id="year-select" class="year-select">
+                            <option value="">กำลังโหลด...</option>
+                        </select>
+                    </div>
                 </div>
+                
                 <div class="bento-grid">
                     <div class="bento-card bento-main">
                         <div class="bento-icon">♻️</div>
